@@ -1,0 +1,15 @@
+Total data points:  8482
+Source
+Min:  12
+25th Quantile:  138.0
+Median Quantile:  280.0
+75th Quantile:  593.0
+Max:  21215
+Avg:  585.87
+Target
+Min:  1
+25th Quantile:  12.0
+Median Quantile:  24.0
+75th Quantile:  48.0
+Max:  5322
+Avg:  55.25

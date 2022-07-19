@@ -1,0 +1,8 @@
+transformers
+torch
+numpy
+tqdm
+pandas
+tokenizers
+datasets
+gdown
