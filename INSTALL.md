@@ -4,7 +4,7 @@
   
 First of all, clone this repository to your local machine and access the main dir via the following command:
 ```
-git https://github.com/VulRepairTeam/VulRepair.git
+git clone https://github.com/awsm-research/VulRepair.git
 cd VulRepair
 ```
 

@@ -111,7 +111,7 @@
 <h4>
     <b>
         <div align="center">
-            The raw predictions of VulRepair can be accessed <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M1_VulRepair_PL-NL/vulrepair_raw_predictions">here</a>
+            The raw predictions of VulRepair can be accessed <a href="https://github.com/awsm-research/VulRepair/tree/main/M1_VulRepair_PL-NL/vulrepair_raw_predictions">here</a>
         </div>
     </b>
 </h4>
@@ -166,7 +166,7 @@
   
 First of all, clone this repository to your local machine and access the main dir via the following command:
 ```
-git https://github.com/VulRepairTeam/VulRepair.git
+git clone https://github.com/awsm-research/VulRepair.git
 cd VulRepair
 ```
 
@@ -326,32 +326,32 @@ python vulrepair_main.py \
   
 ### How to replicate RQ1
   You need to replicate **M1(VulRepair)** and **M2(CodeBERT)** to replicate the results of RQ1:
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M2_CodeBERT_PL-NL">here</a> for the instruction of replicating **M2(CodeBERT)** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M2_CodeBERT_PL-NL">here</a> for the instruction of replicating **M2(CodeBERT)** 
 
 ### How to replicate RQ2
   You need to replicate **M1(VulRepair)**, **M2(CodeBERT)**, **M3**, **M4**, **M5**, **M6** to replicate the results of RQ2:
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M2_CodeBERT_PL-NL">here</a> for the instruction of replicating **M2(CodeBERT)** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M3_T5_no_pretrain_subword">here</a> for the instruction of replicating **M3** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M4_T5_base_NL">here</a> for the instruction of replicating **M4** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M5_BERT_no_pretrain_subword">here</a> for the instruction of replicating **M5** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M6_BERT_base_NL">here</a> for the instruction of replicating **M6** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M2_CodeBERT_PL-NL">here</a> for the instruction of replicating **M2(CodeBERT)** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M3_T5_no_pretrain_subword">here</a> for the instruction of replicating **M3** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M4_T5_base_NL">here</a> for the instruction of replicating **M4** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M5_BERT_no_pretrain_subword">here</a> for the instruction of replicating **M5** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M6_BERT_base_NL">here</a> for the instruction of replicating **M6** 
     
 ### How to replicate RQ3
   You need to replicate **M1(VulRepair)**, **M2(CodeBERT)**, **M7**, **M8**, **M9** to replicate the results of RQ2:
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M2_CodeBERT_PL-NL">here</a> for the instruction of replicating **M2(CodeBERT)** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M7_CodeT5_word_level">here</a> for the instruction of replicating **M7** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M8_VRepair_subword">here</a> for the instruction of replicating **M8** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M9_CodeBERT_word_level">here</a> for the instruction of replicating **M9** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M2_CodeBERT_PL-NL">here</a> for the instruction of replicating **M2(CodeBERT)** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M7_CodeT5_word_level">here</a> for the instruction of replicating **M7** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M8_VRepair_subword">here</a> for the instruction of replicating **M8** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M9_CodeBERT_word_level">here</a> for the instruction of replicating **M9** 
 
 ### How to replicate RQ4
   You need to replicate **M1(VulRepair)**, **M3**, **M7**, **M10** to replicate the results of RQ2:
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M3_T5_no_pretrain_subword">here</a> for the instruction of replicating **M3** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M7_CodeT5_word_level">here</a> for the instruction of replicating **M7** 
-  * Click <a href="https://github.com/VulRepairTeam/VulRepair/tree/main/M10_T5_no_pretrain_word_level">here</a> for the instruction of replicating **M10** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M1_VulRepair_PL-NL">here</a> for the instruction of replicating **M1(VulRepair)**
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M3_T5_no_pretrain_subword">here</a> for the instruction of replicating **M3** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M7_CodeT5_word_level">here</a> for the instruction of replicating **M7** 
+  * Click <a href="https://github.com/awsm-research/VulRepair/tree/main/M10_T5_no_pretrain_word_level">here</a> for the instruction of replicating **M10** 
 
 </details>
 
@@ -430,7 +430,7 @@ python vulrepair_main.py \
 * Special thanks to authors of CVE Fixes, <a href="https://dl.acm.org/doi/pdf/10.1145/3475960.3475985">Bhandari et al.</a>
 
 ## License 
-<a href="https://github.com/VulRepairTeam/VulRepair/blob/main/LICENSE">MIT License</a>
+<a href="https://github.com/awsm-research/VulRepair/blob/main/LICENSE">MIT License</a>
 
 ## Citation
 ```bash
