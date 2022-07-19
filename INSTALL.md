@@ -1,13 +1,20 @@
-### About the Environment Setup
+## About the Environment Setup
 <details open="open">
   <summary></summary>
-  
+
+### Step 1
 First of all, clone this repository to your local machine and access the main dir via the following command:
 ```
 git clone https://github.com/awsm-research/VulRepair.git
 cd VulRepair
 ```
 
+### Step 2
+If having python3 installed in your environment, you may skip this step.
+  
+Otherwise, please install python 3.9 <a href="https://www.python.org/downloads/">here</a>.
+
+### Step 3
 Then, install the python dependencies via the following command:
 ```
 pip install transformers
