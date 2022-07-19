@@ -1,0 +1,28 @@
+<<< Minimum Hardware Requirements >>>
+
+4GB Ram with 10GB disk space available
+
+<<< Recommended Hardware >>>
+
+We recommend using a machine with an NVIDIA GPU available to accelerate the model training and inference process.
+However, all functionality can be executed without a GPU.
+
+<<< Software Requirements >>>
+
+Python 3.9.7 (https://www.python.org/downloads/release/python-397/)
+
+with the following packages:
+
+transformers==4.19.1
+torch==1.10.2+cu113
+numpy==1.22.3
+tqdm==4.62.3
+pandas==1.4.1
+tokenizers==0.11.6
+datasets==2.0.0
+gdown==4.5.1
+
+Please install via requirements.txt using "pip install -r requirements.txt"
+
+Note.
+To utilize NVIDIA GPU on our package, please install the CUDA library here (https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html).
