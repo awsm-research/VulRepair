@@ -189,7 +189,7 @@ cd ..
   
 * To utilize GPU (optional), you also need to install the CUDA library, you may want to check out this <a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html">installation guide</a>.
   
-* <a href="https://www.python.org/downloads/">Python 3.9</a> is recommended, which has been fully tested without issues.
+* <a href="https://www.python.org/downloads/release/python-397/">Python 3.9.7</a> is recommended, which has been fully tested without issues.
  
 </details>
   

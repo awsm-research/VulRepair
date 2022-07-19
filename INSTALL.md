@@ -12,7 +12,7 @@ cd VulRepair
 ### Step 2
 If having python3 installed in your environment, you may skip this step.
   
-Otherwise, please install python 3.9 <a href="https://www.python.org/downloads/">here</a>.
+Otherwise, please install python 3.9.7 <a href="https://www.python.org/downloads/release/python-397/">here</a>.
 
 ### Step 3
 Then, install the python dependencies via the following command:
@@ -34,6 +34,6 @@ cd ..
   
 * To utilize GPU (optional), you also need to install the CUDA library, you may want to check out this <a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html">installation guide</a>.
   
-* <a href="https://www.python.org/downloads/">Python 3.9</a> is recommended, which has been fully tested without issues.
+* <a href="https://www.python.org/downloads/release/python-397/">Python 3.9.7</a> is recommended, which has been fully tested without issues.
  
 </details>
