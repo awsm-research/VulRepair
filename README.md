@@ -436,7 +436,7 @@ python vulrepair_main.py \
 ```bash
 @inproceedings{fu2022vulrepair,
   title={VulRepair: A T5-based Automated Software Vulnerability Repair},
-  author={Fu, Michael and Tantithamthavorn, Chakkrit and Le, Trung and Nguyen, Van and Dinh, Dhung},
+  author={Fu, Michael and Tantithamthavorn, Chakkrit and Le, Trung and Nguyen, Van and Dinh, Phung},
   journal={To appear in the ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE)},
   year={2022}
 }
