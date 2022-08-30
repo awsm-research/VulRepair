@@ -185,6 +185,16 @@ pip install .
 cd ..
 ```
 
+Alternatively, we provide requirements.txt with version of packages specified to ensure the reproducibility,
+you may install via the following:
+```
+pip install -r requirements.txt
+git clone https://github.com/wkentaro/gdown.git
+cd gdown
+pip install .
+cd ..
+```
+
 * We highly recommend you check out this <a href="https://pytorch.org/">installation guide</a> for the "torch" library so you can install the appropriate version on your device.
   
 * To utilize GPU (optional), you also need to install the CUDA library, you may want to check out this <a href="https://docs.nvidia.com/cuda/cuda-quick-start-guide/index.html">installation guide</a>.
