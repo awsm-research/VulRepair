@@ -179,16 +179,19 @@ pip install tqdm
 pip install pandas
 pip install tokenizers
 pip install datasets
-git clone https://github.com/wkentaro/gdown.git
-cd gdown
-pip install .
-cd ..
+pip install gdown
+pip install tensorboard
+pip install scikit-learn
 ```
 
 Alternatively, we provide requirements.txt with version of packages specified to ensure the reproducibility,
 you may install via the following commands:
 ```
 pip install -r requirements.txt
+```
+
+If having an issue with the gdown package, try the following commands:
+```
 git clone https://github.com/wkentaro/gdown.git
 cd gdown
 pip install .
