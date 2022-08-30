@@ -6,3 +6,5 @@ pandas==1.4.1
 tokenizers==0.11.6
 datasets==2.0.0
 gdown==4.5.1
+tensorboard==2.8.0
+scikit-learn==1.1.2
