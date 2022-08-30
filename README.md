@@ -186,7 +186,7 @@ cd ..
 ```
 
 Alternatively, we provide requirements.txt with version of packages specified to ensure the reproducibility,
-you may install via the following:
+you may install via the following commands:
 ```
 pip install -r requirements.txt
 git clone https://github.com/wkentaro/gdown.git
