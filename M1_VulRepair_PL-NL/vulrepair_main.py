@@ -279,7 +279,7 @@ def test(args, model, tokenizer, test_dataset, best_threshold=0.5):
     df = pd.DataFrame({"raw_predictions": [], "correctly_predicted": []})
     df["raw_predictions"] = raw_predictions
     df["correctly_predicted"] = accuracy
-    df.to_csv("../data/raw_predictions/CodeT5/VulRepair_raw_preds.csv")
+    df.to_csv("./raw_predictions/VulRepair_raw_preds.csv")
 
 def main():
     parser = argparse.ArgumentParser()
