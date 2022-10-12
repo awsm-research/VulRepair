@@ -54,7 +54,7 @@ class TextDataset(Dataset):
             sources = val_data["source"].tolist()
             labels = val_data["target"].tolist()
         elif file_type == "test":
-            data = datasets.load_dataset("MickyMike/cve_fixes", split="test")
+            data = datasets.load_dataset("MickyMike/cvefixes_bigvul", split="test")
             sources = data["source"]
             labels = data["target"]
         self.examples = []
@@ -360,9 +360,9 @@ def main():
     logger.info("Training/evaluation parameters %s", args)
     # Training
     if args.do_train:
-        train_data_whole = datasets.load_dataset("MickyMike/cve_fixes", split="train")
+        train_data_whole = datasets.load_dataset("MickyMike/cvefixes_bigvul", split="train")
         df = pd.DataFrame({"source": train_data_whole["source"], "target": train_data_whole["target"]})
-        train_data, val_data = train_test_split(df, test_size=0.1238)
+        train_data, val_data = train_test_split(df, test_size=0.1238, random_state=42)
         train_dataset = TextDataset(tokenizer, args, train_data, val_data, file_type='train')
         eval_dataset = TextDataset(tokenizer, args, train_data, val_data, file_type='eval')
         train(args, train_dataset, model, tokenizer, eval_dataset)
