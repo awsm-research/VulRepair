@@ -241,7 +241,7 @@ All of the dataset has the same number of columns (i.e., 7 cols), we focus on th
 
 Note. 
 
-1. This dataset is originally provided by <a href="https://dl.acm.org/doi/pdf/10.1145/3475960.3475985">Bhandari et al.</a>, and it is further preprocessed by <a href="https://arxiv.org/pdf/2104.08308.pdf">Chen et al.</a>
+1. This dataset is originally provided by <a href="https://dl.acm.org/doi/pdf/10.1145/3475960.3475985">Bhandari et al.</a> and <a href="https://dl.acm.org/doi/10.1145/3379597.3387501">Fan et al.</a>, and it is further preprocessed by <a href="https://arxiv.org/pdf/2104.08308.pdf">Chen et al.</a>
 
     For more information, please kindly refer to <a href="https://github.com/SteveKommrusch/VRepair">this repository</a>.
 
