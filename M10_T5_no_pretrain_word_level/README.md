@@ -17,7 +17,7 @@ python t5_no_pretraining_wordlevel_main.py \
     --model_name=model.bin \
     --config_name=t5-base \
     --do_test \
-    --test_data_file=../data/fine_tune_data/cve_fixes_test.csv \
+    --test_data_file=../data/fine_tune_data/test.csv \
     --encoder_block_size 512 \
     --decoder_block_size 256 \
     --eval_batch_size 1 
@@ -31,9 +31,9 @@ python t5_no_pretraining_wordlevel_main.py \
     --output_dir=./saved_models \
     --config_name=t5-base \
     --do_train \
-    --train_data_file=../data/fine_tune_data/cve_fixes_train.csv \
-    --eval_data_file=../data/fine_tune_data/cve_fixes_val.csv \
-    --test_data_file=../data/fine_tune_data/cve_fixes_test.csv \
+    --train_data_file=../data/fine_tune_data/train.csv \
+    --eval_data_file=../data/fine_tune_data/val.csv \
+    --test_data_file=../data/fine_tune_data/test.csv \
     --epochs 75 \
     --encoder_block_size 512 \
     --decoder_block_size 256 \

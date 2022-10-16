@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 from __future__ import absolute_import, division, print_function
 import argparse
 import glob
@@ -25,15 +24,15 @@ import random
 import re
 import numpy as np
 import torch
+import torch.nn as nn
+from codebert_model import Seq2Seq
 from torch.utils.data import DataLoader, Dataset, SequentialSampler, RandomSampler,TensorDataset
 from torch.utils.data.distributed import DistributedSampler
-from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup, get_constant_schedule, 
-                          T5ForConditionalGeneration, RobertaTokenizer, AutoTokenizer, T5Tokenizer, FlaxT5ForConditionalGeneration)
-from transformers.optimization import Adafactor, AdafactorSchedule
+from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup, 
+                          RobertaConfig, RobertaModel, RobertaTokenizer)
 from tqdm import tqdm
 import multiprocessing
 import pandas as pd
-from torch.utils.tensorboard import SummaryWriter
 import datasets
 from sklearn.model_selection import train_test_split
 
@@ -60,7 +59,7 @@ class TextDataset(Dataset):
             sources = val_data["source"].tolist()
             labels = val_data["target"].tolist()
         elif file_type == "test":
-            data = datasets.load_dataset("MickyMike/cvefixes_bigvul", split="test")
+            data = datasets.load_dataset("MickyMike/cve_fixes", split="test")
             sources = data["source"]
             labels = data["target"]
         self.examples = []
@@ -77,8 +76,7 @@ class TextDataset(Dataset):
         return len(self.examples)
 
     def __getitem__(self, i):       
-        return self.examples[i].input_ids, self.examples[i].input_ids.ne(0), self.examples[i].label, self.examples[i].decoder_input_ids
-
+        return self.examples[i].input_ids, self.examples[i].input_ids.ne(1), self.examples[i].label, self.examples[i].decoder_input_ids, self.examples[i].decoder_input_ids.ne(1)
 
 def convert_examples_to_features(source, label, tokenizer, args):
     # encode
@@ -101,10 +99,9 @@ def train(args, train_dataset, model, tokenizer, eval_dataset):
     train_dataloader = DataLoader(train_dataset, sampler=train_sampler, batch_size=args.train_batch_size, num_workers=0)
     
     args.max_steps = args.epochs * len(train_dataloader)
-
-    # evaluate model per epoch
+    # evaluate the model per epoch
     args.save_steps = len(train_dataloader) * 1
-   
+    
     args.warmup_steps = args.max_steps // 5
     model.to(args.device)
 
@@ -115,11 +112,10 @@ def train(args, train_dataset, model, tokenizer, eval_dataset):
          'weight_decay': args.weight_decay},
         {'params': [p for n, p in model.named_parameters() if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
     ]
-
     optimizer = AdamW(optimizer_grouped_parameters, lr=args.learning_rate, eps=args.adam_epsilon)
     scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=args.warmup_steps,
                                                 num_training_steps=args.max_steps)
-    
+
     # multi-gpu training
     if args.n_gpu > 1:
         model = torch.nn.DataParallel(model)
@@ -137,9 +133,6 @@ def train(args, train_dataset, model, tokenizer, eval_dataset):
     tr_loss, logging_loss, avg_loss, tr_nb, tr_num, train_loss = 0.0, 0.0, 0.0, 0, 0, 0
     best_loss = 100
 
-    writer_path = "tb/codet5_training_loss"
-    writer = SummaryWriter(writer_path)
-
     model.zero_grad()
 
     for idx in range(args.epochs): 
@@ -147,10 +140,10 @@ def train(args, train_dataset, model, tokenizer, eval_dataset):
         tr_num = 0
         train_loss = 0
         for step, batch in enumerate(bar):
-            (input_ids, attention_mask, labels, decoder_input_ids) = [x.squeeze(1).to(args.device) for x in batch]
+            (input_ids, attention_mask, labels, decoder_input_ids, target_mask) = [x.squeeze(1).to(args.device) for x in batch]
             model.train()
             # the forward function automatically creates the correct decoder_input_ids
-            loss = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels).loss
+            loss, _, _ = model(source_ids=input_ids, source_mask=attention_mask, target_ids=decoder_input_ids, target_mask=target_mask)
             if args.n_gpu > 1:
                 loss = loss.mean()
             if args.gradient_accumulation_steps > 1:
@@ -171,13 +164,13 @@ def train(args, train_dataset, model, tokenizer, eval_dataset):
                 scheduler.step()  
                 global_step += 1
                 output_flag = True
-                avg_loss = round(np.exp((tr_loss - logging_loss) /(global_step- tr_nb)),4)
+                avg_loss = round(np.exp((tr_loss - logging_loss) /(global_step- tr_nb)), 4)
                 if global_step % args.save_steps == 0:
                     # placeholder of evaluation
-                    eval_loss = evaluate(args, model, tokenizer, eval_dataset, eval_when_training=True)    
+                    result = evaluate(args, model, tokenizer, eval_dataset, eval_when_training=True)    
                     # Save model checkpoint
-                    if eval_loss < best_loss:
-                        best_loss = eval_loss
+                    if result < best_loss:
+                        best_loss = result
                         logger.info("  "+"*"*20)  
                         logger.info("  Best Loss:%s",round(best_loss,4))
                         logger.info("  "+"*"*20)                          
@@ -210,20 +203,21 @@ def evaluate(args, model, tokenizer, eval_dataset, eval_when_training=False):
     logger.info("  Num examples = %d", len(eval_dataset))
     logger.info("  Batch size = %d", args.eval_batch_size)
     model.eval()
-    
-    eval_loss, num = 0, 0
     bar = tqdm(eval_dataloader, total=len(eval_dataloader))
+    
+    eval_loss, tokens_num = 0, 0
     for batch in bar:
-        (input_ids, attention_mask, labels, decoder_input_ids) = [x.squeeze(1).to(args.device) for x in batch]
-        loss = model(input_ids=input_ids, attention_mask=attention_mask, labels=labels).loss
-        if args.n_gpu > 1:
-            loss = loss.mean()
-        eval_loss += loss.item()
-        num += 1
-    eval_loss = round(eval_loss/num,5)
+        (input_ids, attention_mask, labels, decoder_input_ids, target_mask) = [x.squeeze(1).to(args.device) for x in batch]
+        with torch.no_grad():
+            _, loss, num = model(source_ids=input_ids,source_mask=attention_mask,
+                                target_ids=decoder_input_ids,target_mask=target_mask)     
+        eval_loss += loss.sum().item()
+        tokens_num += num.sum().item()
+    eval_loss = eval_loss / tokens_num
+    # show loss of dev dataset    
     model.train()
     logger.info("***** Eval results *****")
-    logger.info(f"Evaluation Loss: {str(eval_loss)}")
+    logger.info(f"Evaluation Loss: {str(eval_loss)}")    
     return eval_loss
 
 def test(args, model, tokenizer, test_dataset, best_threshold=0.5):
@@ -237,7 +231,6 @@ def test(args, model, tokenizer, test_dataset, best_threshold=0.5):
     logger.info("***** Running Test *****")
     logger.info("  Num examples = %d", len(test_dataset))
     logger.info("  Batch size = %d", args.eval_batch_size)
-    nb_eval_steps = 0
     model.eval()
     accuracy = []
     raw_predictions = []
@@ -245,15 +238,10 @@ def test(args, model, tokenizer, test_dataset, best_threshold=0.5):
     bar = tqdm(test_dataloader, total=len(test_dataloader))
     for batch in bar:
         correct_pred = False
-        (input_ids, attention_mask, labels, decoder_input_ids)=[x.squeeze(1).to(args.device) for x in batch]
+        (input_ids, attention_mask, labels, decoder_input_ids, target_mask) = [x.squeeze(1).to(args.device) for x in batch]
         with torch.no_grad():
-            beam_outputs = model.generate(input_ids=input_ids,
-                                          attention_mask=attention_mask,
-                                          do_sample=False, # disable sampling to test if batching affects output
-                                          num_beams=args.num_beams,
-                                          num_return_sequences=args.num_beams,
-                                          max_length=args.decoder_block_size)
-        beam_outputs = beam_outputs.detach().cpu().tolist()
+            beam_outputs = model(source_ids=input_ids, source_mask=attention_mask)
+            beam_outputs = beam_outputs.detach().cpu().tolist()[0]
         decoder_input_ids = decoder_input_ids.detach().cpu().tolist()
         for single_output in beam_outputs:
             # pred
@@ -275,19 +263,10 @@ def test(args, model, tokenizer, test_dataset, best_threshold=0.5):
             raw_pred = clean_tokens(raw_pred)
             raw_predictions.append(raw_pred)
             accuracy.append(0)
-        nb_eval_steps += 1
     # calculate accuracy
     test_result = round(sum(accuracy) / len(accuracy), 4)
     logger.info("***** Test results *****")
     logger.info(f"Test Accuracy: {str(test_result)}")
-
-    # write prediction to file
-    df = pd.read_csv(args.test_data_file)
-    df["raw_predictions"] = raw_predictions
-    df["correctly_predicted"] = accuracy
-    f_name = args.test_data_file.split("/")[-1].split("_")[:2]
-    f_name = "_".join(f_name)
-    df.to_csv(f"../data/raw_predictions/T5-base/{f_name}_raw_preds.csv")
 
 
 def main():
@@ -306,12 +285,12 @@ def main():
                         help="Optional input sequence length after tokenization."
                              "The training dataset will be truncated in block of this size for training."
                              "Default to the model max input length for single sentence inputs (take into account special tokens).")
-    parser.add_argument("--num_beams", default=50, type=int,
+    parser.add_argument("--beam_size", default=50, type=int,
                         help="Beam size to use when decoding.")                          
     parser.add_argument("--model_name", default="model.bin", type=str,
                         help="Saved model name.")
     parser.add_argument("--checkpoint_model_name", default="non_domain_model.bin", type=str,
-                            help="Checkpoint model name.")
+                        help="Checkpoint model name.")
     parser.add_argument("--model_name_or_path", default=None, type=str,
                         help="The model checkpoint for weights initialization.")
     parser.add_argument("--config_name", default="", type=str,
@@ -329,7 +308,7 @@ def main():
                         help="Whether to run eval on the dev set.")
     parser.add_argument("--do_test", action='store_true',
                         help="Whether to run eval on the dev set.")
-    parser.add_argument("--load_model_from_checkpoint", default=False, action='store_true',
+    parser.add_argument("--load_model_from_checkpoint", action='store_true', default=False,
                         help="Whether to load model from checkpoint.")
 
     parser.add_argument("--evaluate_during_training", action='store_true',
@@ -373,15 +352,22 @@ def main():
     # Set seed
     set_seed(args)
 
-    tokenizer = T5Tokenizer.from_pretrained(args.tokenizer_name)
+    config = RobertaConfig.from_pretrained(args.config_name if args.config_name else args.model_name_or_path)
+    tokenizer = RobertaTokenizer.from_pretrained(args.tokenizer_name)
     tokenizer.add_tokens(["<S2SV_StartBug>", "<S2SV_EndBug>", "<S2SV_blank>", "<S2SV_ModStart>", "<S2SV_ModEnd>"])
-    model = T5ForConditionalGeneration.from_pretrained(args.model_name_or_path) #  from_flax=True 
-    model.resize_token_embeddings(len(tokenizer))
-    
+    # build model
+    encoder = RobertaModel.from_pretrained(args.model_name_or_path,config=config)   
+    encoder.resize_token_embeddings(len(tokenizer))
+    decoder_layer = nn.TransformerDecoderLayer(d_model=config.hidden_size, nhead=config.num_attention_heads)
+    decoder = nn.TransformerDecoder(decoder_layer, num_layers=6)
+    model=Seq2Seq(encoder=encoder,decoder=decoder,config=config,
+                  beam_size=args.beam_size,max_length=args.decoder_block_size,
+                  sos_id=tokenizer.cls_token_id,eos_id=tokenizer.sep_token_id)
+        
     logger.info("Training/evaluation parameters %s", args)
     # Training
     if args.do_train:
-        train_data_whole = datasets.load_dataset("MickyMike/cvefixes_bigvul", split="train")
+        train_data_whole = datasets.load_dataset("MickyMike/cve_fixes", split="train")
         df = pd.DataFrame({"source": train_data_whole["source"], "target": train_data_whole["target"]})
         train_data, val_data = train_test_split(df, test_size=0.1238)
         train_dataset = TextDataset(tokenizer, args, train_data, val_data, file_type='train')
@@ -395,7 +381,7 @@ def main():
         model.load_state_dict(torch.load(output_dir, map_location=args.device))
         model.to(args.device)
         test_dataset = TextDataset(tokenizer, args, file_type='test')
-        test(args, model, tokenizer, test_dataset, best_threshold=0.5)
+        test(args, model, tokenizer, test_dataset, best_threshold=0.5)   
     return results
 
 if __name__ == "__main__":
