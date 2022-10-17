@@ -320,8 +320,8 @@ python vulrepair_main.py \
     --epochs 75 \
     --encoder_block_size 512 \
     --decoder_block_size 256 \
-    --train_batch_size 8 \
-    --eval_batch_size 8 \
+    --train_batch_size 4 \
+    --eval_batch_size 4 \
     --learning_rate 2e-5 \
     --max_grad_norm 1.0 \
     --evaluate_during_training \
@@ -440,9 +440,9 @@ python vulrepair_main.py \
 </details>
 
 ## Acknowledgements
-* Special thanks to authors of VRepair, <a href="https://arxiv.org/pdf/2104.08308.pdf">Chen et al.</a>
-* Special thanks to authors of CodeT5, <a href="https://arxiv.org/pdf/2109.00859.pdf">Wang et al.</a>
-* Special thanks to authors of CVE Fixes, <a href="https://dl.acm.org/doi/pdf/10.1145/3475960.3475985">Bhandari et al.</a>
+* Special thanks to authors of VRepair (<a href="https://arxiv.org/pdf/2104.08308.pdf">Chen et al.</a>)
+* Special thanks to authors of CodeT5 (<a href="https://arxiv.org/pdf/2109.00859.pdf">Wang et al.</a>)
+* Special thanks to dataset providers of CVEFixes (<a href="https://dl.acm.org/doi/pdf/10.1145/3475960.3475985">Bhandari et al.</a>) and Big-Vul (<a href="https://dl.acm.org/doi/10.1145/3379597.3387501">Fan et al.</a>)
 
 ## License 
 <a href="https://github.com/awsm-research/VulRepair/blob/main/LICENSE">MIT License</a>
