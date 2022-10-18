@@ -308,8 +308,9 @@ python vulrepair_main.py \
 ```
 Note. please adjust the "num_beams" parameters accordingly to obtain the results we present in the discussion section. (i.e., num_beams= 1, 2, 3, 4, 5, 10)
 
-To retrain the VulRepair model from scratch, run the following commands **(Training only)**:
+To retrain the VulRepair model from scratch, run the following commands **(Training + Inference)**:
 ```
+# training
 cd M1_VulRepair_PL-NL
 python vulrepair_main.py \
     --model_name=model.bin \
@@ -326,6 +327,20 @@ python vulrepair_main.py \
     --max_grad_norm 1.0 \
     --evaluate_during_training \
     --seed 123456  2>&1 | tee train.log
+```
+
+```
+# Inference
+python vulrepair_main.py \
+    --output_dir=./saved_models \
+    --model_name=model.bin \
+    --tokenizer_name=Salesforce/codet5-base \
+    --model_name_or_path=Salesforce/codet5-base \
+    --do_test \
+    --encoder_block_size 512 \
+    --decoder_block_size 256 \
+    --num_beams=50 \
+    --eval_batch_size 1
 ```
 
 </details>
