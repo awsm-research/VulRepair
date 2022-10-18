@@ -369,8 +369,10 @@ def main():
     # Evaluation
     results = {}  
     if args.do_test:
-        model = T5ForConditionalGeneration.from_pretrained(args.model_name_or_path)
-        tokenizer = RobertaTokenizer.from_pretrained(args.tokenizer_name)
+        if args.model_name_or_path != "MickyMike/VulRepair":
+            checkpoint_prefix = f'checkpoint-best-loss/{args.model_name}'
+            output_dir = os.path.join(args.output_dir, '{}'.format(checkpoint_prefix))  
+            model.load_state_dict(torch.load(output_dir, map_location=args.device))
         model.to(args.device)
         test_dataset = TextDataset(tokenizer, args, file_type='test')
         test(args, model, tokenizer, test_dataset, best_threshold=0.5)
