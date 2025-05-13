@@ -1,5 +1,8 @@
 [![DOI](https://zenodo.org/badge/515394665.svg)](https://zenodo.org/badge/latestdoi/515394665)
 
+🚨 **Data Duplication Alert**
+- **A recent study has identified a data duplication issue in this benchmark dataset, specifically between the training and testing sets.** We thank Anurag Swarnim Yadav and Joseph N. Wilson for bringing this issue to our attention. For further details, please refer to their [ACSAC 2024 paper](https://arxiv.org/abs/2503.06387).
+
 <div align="center">
   
 # <a href="https://www.researchgate.net/publication/362092639_VulRepair_A_T5-Based_Automated_Software_Vulnerability_Repair">VulRepair</a> Replication Package
@@ -209,6 +212,7 @@ cd ..
 </details>
   
 ### About the Datasets
+
 <details open="open">
   <summary></summary>
   
